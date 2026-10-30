@@ -10,7 +10,7 @@ import TorusFourierNS.FieldBiotSavart
 
 Everything is on the Fourier side of the real torus: a field is `v : ℤ³ → ℂ³`
 (`TorusFourierNS.FField`). A state is a divergence-free, mean-zero velocity
-`u ∈ L²(T³)` (`IsL2DivFreeMeanZero u`), its vorticity is `ω = curl u`, and the kinetic energy
+`u ∈ L²(T³)` (`DivergenceFreeL2MeanZero u`), its vorticity is `ω = curl u`, and the kinetic energy
 is `H = fieldEnergy` (`H(curl u) = ½‖u‖²`). No identification of `ℝ³` with `T³` is made.
 
 The tether kernel is
@@ -34,7 +34,7 @@ open TorusFourierNS
 /-- A state: a divergence-free, mean-zero `L²` velocity field on `T³` (Fourier side). -/
 structure TorusState where
   u : FField
-  prop : IsL2DivFreeMeanZero u
+  prop : DivergenceFreeL2MeanZero u
 
 /-- Vorticity `ω = curl u`. -/
 def TorusState.ω (s : TorusState) : FField := fieldCurl s.u
@@ -142,35 +142,35 @@ def wt (ω : FField) (n : Mode) : ℝ := modePairing (ω n) (ω n)
 lemma wt_nonneg (ω : FField) (n : Mode) : 0 ≤ wt ω n := modePairing_self_nonneg _
 
 /-- Projected velocity slot `Π_u curl(δF/δω)`. -/
-def velSlot (F : Functional) (s : TorusState) : FField := Pi_u s.u (fieldCurl (fd F s))
+def velocityFieldSlot (F : Functional) (s : TorusState) : FField := Pi_u s.u (fieldCurl (fd F s))
 
 /-- The velocity-slot tether kernel on `T³`. -/
 def TetherKernelT (kappa : ℝ) (s : TorusState) (F G : Functional) : ℝ :=
-  -kappa * ∑' n, wt s.ω n * modePairing (velSlot F s n) (velSlot G s n)
+  -kappa * ∑' n, wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot G s n)
 
 theorem tetherKernelT_comm (kappa : ℝ) (s : TorusState) (F G : Functional) :
     TetherKernelT kappa s F G = TetherKernelT kappa s G F := by
-  unfold TetherKernelT; simp only [modePairing_comm (velSlot F s _)]
+  unfold TetherKernelT; simp only [modePairing_comm (velocityFieldSlot F s _)]
 
 theorem tetherKernelT_quadratic_form (kappa : ℝ) (s : TorusState) (F : Functional) :
     TetherKernelT kappa s F F =
-      -kappa * ∑' n, wt s.ω n * ∑ i, ‖velSlot F s n i‖ ^ 2 := by
+      -kappa * ∑' n, wt s.ω n * ∑ i, ‖velocityFieldSlot F s n i‖ ^ 2 := by
   unfold TetherKernelT; simp only [modePairing_self]
 
 theorem tetherKernelT_diag_nonpos {kappa : ℝ} (hκ : 0 ≤ kappa) (s : TorusState) (F : Functional) :
     TetherKernelT kappa s F F ≤ 0 := by
   unfold TetherKernelT
-  have : 0 ≤ ∑' n, wt s.ω n * modePairing (velSlot F s n) (velSlot F s n) :=
+  have : 0 ≤ ∑' n, wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot F s n) :=
     tsum_nonneg fun n => mul_nonneg (wt_nonneg _ _) (modePairing_self_nonneg _)
   nlinarith
 
 /-- Mode density `-κ |ω̂ₙ|² |(Π_u curl δF)̂ₙ|²`. -/
 def modeDensity (kappa : ℝ) (s : TorusState) (F : Functional) (n : Mode) : ℝ :=
-  -kappa * (wt s.ω n * modePairing (velSlot F s n) (velSlot F s n))
+  -kappa * (wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot F s n))
 
 /-- Strict damping on every mode where `ω̂ₙ ≠ 0` and the projected slot is nonzero. -/
 theorem modeDensity_strict_neg {kappa : ℝ} (hκ : 0 < kappa) (s : TorusState) (F : Functional)
-    (n : Mode) (hω : s.ω n ≠ 0) (hP : velSlot F s n ≠ 0) : modeDensity kappa s F n < 0 := by
+    (n : Mode) (hω : s.ω n ≠ 0) (hP : velocityFieldSlot F s n ≠ 0) : modeDensity kappa s F n < 0 := by
   unfold modeDensity
   have := mul_pos (modePairing_self_pos hω) (modePairing_self_pos hP)
   unfold wt; nlinarith
@@ -178,11 +178,11 @@ theorem modeDensity_strict_neg {kappa : ℝ} (hκ : 0 < kappa) (s : TorusState) 
 /-- C3 (controllable negative feedback). -/
 def ProducesControllableNegativeFeedbackT (kappa : ℝ)
     (B : TorusState → Functional → Functional → ℝ) : Prop :=
-  ∀ F s, B s F F ≤ -kappa * ∑' n, wt s.ω n * ∑ i, ‖velSlot F s n i‖ ^ 2
+  ∀ F s, B s F F ≤ -kappa * ∑' n, wt s.ω n * ∑ i, ‖velocityFieldSlot F s n i‖ ^ 2
 
 /-- Minimality bound. -/
 def FeedbackAtMostT (kappa : ℝ) (B : TorusState → Functional → Functional → ℝ) : Prop :=
-  ∀ F s, -kappa * ∑' n, wt s.ω n * ∑ i, ‖velSlot F s n i‖ ^ 2 ≤ B s F F
+  ∀ F s, -kappa * ∑' n, wt s.ω n * ∑ i, ‖velocityFieldSlot F s n i‖ ^ 2 ≤ B s F F
 
 theorem tetherKernelT_C3 (kappa : ℝ) :
     ProducesControllableNegativeFeedbackT kappa (TetherKernelT kappa) :=
@@ -198,8 +198,8 @@ def DegenerateWRTKineticEnergyT (B : TorusState → Functional → Functional �
   ∀ F s, B s F KineticEnergy = 0
 
 /-- The energy slot vanishes: `Π_u curl(δH/δω) = Π_u u = 0`. -/
-theorem velSlot_energy (s : TorusState) : velSlot KineticEnergy s = 0 := by
-  unfold velSlot; rw [kineticEnergyCurlIdentity s]; exact Pi_u_self s.prop.summable
+theorem velSlot_energy (s : TorusState) : velocityFieldSlot KineticEnergy s = 0 := by
+  unfold velocityFieldSlot; rw [kineticEnergyCurlIdentity s]; exact Pi_u_self s.prop.summable
 
 /-- **C2, unconditional on `T³`.** -/
 theorem tetherKernelT_C2 (kappa : ℝ) : DegenerateWRTKineticEnergyT (TetherKernelT kappa) := by
@@ -276,8 +276,8 @@ lemma finEnergy_act {θ : Mode → ℂ} (h : IsPhase θ) {v : FField} (hv : FinE
     FinEnergy (act θ v) := by
   unfold FinEnergy; simp only [modeE_act h]; exact hv
 
-lemma isL2_act {θ : Mode → ℂ} (h : IsPhase θ) {u : FField} (hu : IsL2DivFreeMeanZero u) :
-    IsL2DivFreeMeanZero (act θ u) where
+lemma isL2_act {θ : Mode → ℂ} (h : IsPhase θ) {u : FField} (hu : DivergenceFreeL2MeanZero u) :
+    DivergenceFreeL2MeanZero (act θ u) where
   summable := by simpa [act, h _] using hu.summable
   div_free := fun n => by
     have := hu.div_free n
@@ -344,8 +344,8 @@ lemma Pi_u_act {θ : Mode → ℂ} (h : IsPhase θ) (u v : FField) :
   unfold Pi_u; rw [fieldPairing_act h, fieldPairing_act h, act_sub, act_smul]
 
 lemma velSlot_act {θ : Mode → ℂ} (h : IsPhase θ) (F : Functional) (s : TorusState) :
-    velSlot (actFun θ F) (actState h s) = act θ (velSlot F s) := by
-  unfold velSlot fd
+    velocityFieldSlot (actFun θ F) (actState h s) = act θ (velocityFieldSlot F s) := by
+  unfold velocityFieldSlot fd
   rw [actState_ω, fd_act h, fieldCurl_act, ← Pi_u_act h]; rfl
 
 /-- C1 predicate: covariance under every unimodular phase (functionals transported). -/
@@ -362,52 +362,52 @@ theorem tetherKernelT_C1 (kappa : ℝ) : PhaseInvariant (TetherKernelT kappa) :=
   congr 1
   refine tsum_congr fun n => ?_
   unfold wt
-  show modePairing (fun i => θ n * s.ω n i) (fun i => θ n * s.ω n i) * modePairing (fun i => θ n * velSlot F s n i) (fun i => θ n * velSlot G s n i) = _
+  show modePairing (fun i => θ n * s.ω n i) (fun i => θ n * s.ω n i) * modePairing (fun i => θ n * velocityFieldSlot F s n i) (fun i => θ n * velocityFieldSlot G s n i) = _
   rw [modePairing_phase (h n), modePairing_phase (h n)]
 
 /-! ## Polarization and uniqueness -/
 
 /-- Polarization predicate. -/
-def PolarizesT (B : TorusState → Functional → Functional → ℝ) : Prop :=
+def TetherTwoFormPolarizesT (B : TorusState → Functional → Functional → ℝ) : Prop :=
   ∀ s F G, 2 * B s F G = B s (fun ω => F ω + G ω) (fun ω => F ω + G ω) - B s F F - B s G G
 
 /-- Named hypothesis: the projected slot is additive in the functional at `s`. -/
-def VelSlotAdditive (s : TorusState) (F G : Functional) : Prop :=
-  velSlot (fun ω => F ω + G ω) s = velSlot F s + velSlot G s
+def VelocityFieldSlotAdditive (s : TorusState) (F G : Functional) : Prop :=
+  velocityFieldSlot (fun ω => F ω + G ω) s = velocityFieldSlot F s + velocityFieldSlot G s
 
 /-- Named hypothesis: the weighted slot series for `(F,F)`, `(G,G)`, `(F,G)` are summable. -/
-def WeightedSlotSummable (s : TorusState) (F G : Functional) : Prop :=
-  Summable (fun n => wt s.ω n * modePairing (velSlot F s n) (velSlot F s n)) ∧
-  Summable (fun n => wt s.ω n * modePairing (velSlot G s n) (velSlot G s n)) ∧
-  Summable (fun n => wt s.ω n * modePairing (velSlot F s n) (velSlot G s n))
+def VelocityFieldSlotSummable (s : TorusState) (F G : Functional) : Prop :=
+  Summable (fun n => wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot F s n)) ∧
+  Summable (fun n => wt s.ω n * modePairing (velocityFieldSlot G s n) (velocityFieldSlot G s n)) ∧
+  Summable (fun n => wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot G s n))
 
 theorem tetherKernelT_polarizes_at (kappa : ℝ) (s : TorusState) (F G : Functional)
-    (hadd : VelSlotAdditive s F G) (hsum : WeightedSlotSummable s F G) :
+    (hadd : VelocityFieldSlotAdditive s F G) (hsum : VelocityFieldSlotSummable s F G) :
     2 * TetherKernelT kappa s F G =
       TetherKernelT kappa s (fun ω => F ω + G ω) (fun ω => F ω + G ω) -
         TetherKernelT kappa s F F - TetherKernelT kappa s G G := by
   obtain ⟨hFF, hGG, hFG⟩ := hsum
   unfold TetherKernelT
   rw [hadd]
-  have hpt : (fun n => wt s.ω n * modePairing ((velSlot F s + velSlot G s) n)
-      ((velSlot F s + velSlot G s) n)) = fun n =>
-      (wt s.ω n * modePairing (velSlot F s n) (velSlot F s n) +
-        wt s.ω n * modePairing (velSlot G s n) (velSlot G s n)) +
-        2 * (wt s.ω n * modePairing (velSlot F s n) (velSlot G s n)) := by
+  have hpt : (fun n => wt s.ω n * modePairing ((velocityFieldSlot F s + velocityFieldSlot G s) n)
+      ((velocityFieldSlot F s + velocityFieldSlot G s) n)) = fun n =>
+      (wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot F s n) +
+        wt s.ω n * modePairing (velocityFieldSlot G s n) (velocityFieldSlot G s n)) +
+        2 * (wt s.ω n * modePairing (velocityFieldSlot F s n) (velocityFieldSlot G s n)) := by
     funext n; simp only [Pi.add_apply, modePairing_add_add]; ring
   rw [hpt, Summable.tsum_add (hFF.add hGG) (hFG.mul_left 2), Summable.tsum_add hFF hGG,
     tsum_mul_left]
   ring
 
 theorem tetherKernelT_polarizes (kappa : ℝ)
-    (hadd : ∀ s F G, VelSlotAdditive s F G) (hsum : ∀ s F G, WeightedSlotSummable s F G) :
-    PolarizesT (TetherKernelT kappa) := fun s F G =>
+    (hadd : ∀ s F G, VelocityFieldSlotAdditive s F G) (hsum : ∀ s F G, VelocityFieldSlotSummable s F G) :
+    TetherTwoFormPolarizesT (TetherKernelT kappa) := fun s F G =>
   tetherKernelT_polarizes_at kappa s F G (hadd s F G) (hsum s F G)
 
 /-- **Uniqueness.** C3, the minimality bound and polarization force `B = TetherKernelT`. -/
 theorem uniqueness_T (kappa : ℝ) (B : TorusState → Functional → Functional → ℝ)
     (hC3 : ProducesControllableNegativeFeedbackT kappa B) (hmin : FeedbackAtMostT kappa B)
-    (hPB : PolarizesT B) (hPT : PolarizesT (TetherKernelT kappa)) :
+    (hPB : TetherTwoFormPolarizesT B) (hPT : TetherTwoFormPolarizesT (TetherKernelT kappa)) :
     ∀ s F G, B s F G = TetherKernelT kappa s F G := by
   have hs : ∀ F s, B s F F = TetherKernelT kappa s F F := fun F s => by
     rw [tetherKernelT_quadratic_form]; exact le_antisymm (hC3 F s) (hmin F s)
@@ -417,10 +417,10 @@ theorem uniqueness_T (kappa : ℝ) (B : TorusState → Functional → Functional
   linarith
 
 /-- Named hypothesis: the tether is not identically zero on the diagonal. -/
-def TetherNontrivial (kappa : ℝ) : Prop := ∃ s F, TetherKernelT kappa s F F ≠ 0
+def TetherKernelNontrivial (kappa : ℝ) : Prop := ∃ s F, TetherKernelT kappa s F F ≠ 0
 
 /-- **C1–C3 alone do not determine the tether** (C1, C2, C3 all proved; `2·TetherKernelT`). -/
-theorem c1_c3_not_unique_T {kappa : ℝ} (hκ : 0 ≤ kappa) (hne : TetherNontrivial kappa) :
+theorem c1_c3_not_unique_T {kappa : ℝ} (hκ : 0 ≤ kappa) (hne : TetherKernelNontrivial kappa) :
     ∃ B : TorusState → Functional → Functional → ℝ,
       (∀ s F G, B s F G = B s G F) ∧ PhaseInvariant B ∧ DegenerateWRTKineticEnergyT B ∧
       ProducesControllableNegativeFeedbackT kappa B ∧
@@ -482,8 +482,8 @@ lemma Pi_u_smul {c : ℝ} (hc : c ≠ 0) (u v : FField) : Pi_u (c • u) v = Pi_
     try (rw [← Complex.ofReal_mul]; congr 1; field_simp)
 
 theorem velSlot_scale {c : ℝ} (hc : c ≠ 0) (F : Functional) (s : TorusState)
-    (hF : fd F (scaleState c s) = fd F s) : velSlot F (scaleState c s) = velSlot F s := by
-  unfold velSlot; rw [hF]; exact Pi_u_smul hc _ _
+    (hF : fd F (scaleState c s) = fd F s) : velocityFieldSlot F (scaleState c s) = velocityFieldSlot F s := by
+  unfold velocityFieldSlot; rw [hF]; exact Pi_u_smul hc _ _
 
 /-- **Degree 2** under `ω ↦ cω` when `δF, δG` are scale invariant. -/
 theorem step2_degree_T (kappa : ℝ) (F G : Functional) (s : TorusState) (c : ℝ) (hc : c ≠ 0)
@@ -577,7 +577,7 @@ theorem comparison_ode_ceiling (C κ'' : ℝ) (hC : 0 < C) (hκ : 0 < κ'') (y :
 def P1T (kappa : ℝ) : Prop :=
   (∀ B : TorusState → Functional → Functional → ℝ,
     ProducesControllableNegativeFeedbackT kappa B → FeedbackAtMostT kappa B →
-    PolarizesT B → PolarizesT (TetherKernelT kappa) →
+    TetherTwoFormPolarizesT B → TetherTwoFormPolarizesT (TetherKernelT kappa) →
     ∀ s F G, B s F G = TetherKernelT kappa s F G) ∧
   (∀ (F G : Functional) (s : TorusState) (c : ℝ), c ≠ 0 →
     fd F (scaleState c s) = fd F s → fd G (scaleState c s) = fd G s →
@@ -602,7 +602,7 @@ def P2T (kappa : ℝ) : Prop :=
     TetherKernelT kappa s KineticEnergy KineticEnergy = 0) ∧
   (∀ s F, TetherKernelT kappa s F F ≤ 0) ∧
   (∀ (u : FField) (lam : ℝ), fieldPairing u u ≠ 0 → Pi_u u (lam • u) = 0) ∧
-  (∀ s F n, s.ω n ≠ 0 → velSlot F s n ≠ 0 → modeDensity kappa s F n < 0)
+  (∀ s F n, s.ω n ≠ 0 → velocityFieldSlot F s n ≠ 0 → modeDensity kappa s F n < 0)
 
 /-- `P3T`: Young absorption at `ε = κ/4` (algebra). -/
 def P3T (kappa : ℝ) : Prop :=

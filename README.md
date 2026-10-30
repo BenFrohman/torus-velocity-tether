@@ -1,7 +1,7 @@
 # torus-velocity-tether (private)
 
 Lean 4 + Mathlib rebuild of the velocity-tether model on the 3-torus T³, in Fourier variables.
-It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `a2c4d0e22cf7f8f637c5b4e7f0287b9da45ea189`
+It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `a241bf427d25be13e358c6df09176ca3f3ad75e4`
 (it uses `streamFunctionRepresentative_T3`, `fieldCurl_functionalDerivative_eq` and `fieldGateauxRep_unique`).
 ℝ³ is **never** identified with T³. **This repository does not solve, and does not claim to solve, the Clay Navier–Stokes problem.**
 
@@ -17,9 +17,9 @@ Build with `lake build`. Run the audit with `lake env lean AxiomAudit.lean`. The
 - `torus_velocity_tether_product_theorem (hκ : 0 < kappa) : P1T ∧ P2T ∧ P3T ∧ P4T`. Its only hypothesis is κ > 0, and κ is otherwise a general parameter.
 
 ## What is conditional (named `Prop`s, passed explicitly)
-- `VelSlotAdditive s F G` and `WeightedSlotSummable s F G` are needed by `tetherKernelT_polarizes`, which proves `PolarizesT (TetherKernelT κ)`.
-- The uniqueness conjunct of `P1T` (`uniqueness_T`) takes `PolarizesT B` and `PolarizesT (TetherKernelT κ)` as explicit premises.
-- `TetherNontrivial κ` is needed by `c1_c3_not_unique_T`, which says C1–C3 alone do not determine the tether.
+- `VelocityFieldSlotAdditive s F G` and `VelocityFieldSlotSummable s F G` are needed by `tetherKernelT_polarizes`, which proves `TetherTwoFormPolarizesT (TetherKernelT κ)`.
+- The uniqueness conjunct of `P1T` (`uniqueness_T`) takes `TetherTwoFormPolarizesT B` and `TetherTwoFormPolarizesT (TetherKernelT κ)` as explicit premises.
+- `TetherKernelNontrivial κ` is needed by `c1_c3_not_unique_T`, which says C1–C3 alone do not determine the tether.
 
 ## Honest model changes vs. the original `VelocityTether.lean`
 - The tether weight is the **mode-diagonal** |ω̂ₙ|², not the physical-space weight |ω(x)|².
