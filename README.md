@@ -25,3 +25,9 @@ Build with `lake build`. Run the audit with `lake env lean AxiomAudit.lean`. The
 - The tether weight is the **mode-diagonal** |ω̂ₙ|², not the physical-space weight |ω(x)|².
 - C1 covers the phase group only. The original C1 was vacuous because the coadjoint action was the identity. The KKS skew/Jacobi structure and the classical bracket were **not** rebuilt.
 - P3T is only the algebraic Young-absorption step. P4T is a scalar ODE ceiling. Neither is a PDE regularity statement.
+
+## Copyright, license and scope
+
+Copyright 2026 Benjamin Stanley Frohman (ORCID [0009-0006-7068-3718](https://orcid.org/0009-0006-7068-3718)). Licensed under the Apache License, Version 2.0; see `LICENSE` and `NOTICE`.
+
+What is proved vs. conditional: See "What is proved unconditionally" and "What is conditional (named `Prop`s, passed explicitly)" above. Every hypothesis is a named `Prop` passed as an explicit argument. Nothing in this repository claims to solve the Clay Millennium problem or global regularity for unmodified 3D Navier–Stokes.
