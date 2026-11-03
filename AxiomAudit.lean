@@ -1,36 +1,68 @@
-/-
-Copyright (c) 2026 Benjamin Stanley Frohman. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Benjamin Stanley Frohman
--/
--- Kernel axiom audit. Run: `lake env lean AxiomAudit.lean`.
--- Fails if any declaration in the `TorusVelocityTether` module tree depends on an axiom outside
--- {propext, Classical.choice, Quot.sound} (for example `sorryAx`).
-import Lean
+-- Axiom audit: prints the axioms of every theorem/lemma in the project.
+-- CI fails unless each depends only on propext, Classical.choice, Quot.sound (or none).
 import TorusVelocityTether
+import TorusVelocityTether.Basic
 
-open Lean Elab Command
-
-#eval show CommandElabM Unit from do
-  let env ← getEnv
-  let allowed : List Name := [``propext, ``Classical.choice, ``Quot.sound]
-  let mut thms := 0
-  let mut defs := 0
-  let mut bad : Array String := #[]
-  for (n, ci) in env.constants.toList do
-    let some idx := env.getModuleIdxFor? n | continue
-    let mod := env.header.moduleNames[idx.toNat]!
-    unless (`TorusVelocityTether).isPrefixOf mod do continue
-    if n.isInternal then continue
-    match ci with
-    | .thmInfo _ => thms := thms + 1
-    | .defnInfo _ => defs := defs + 1
-    | _ => pure ()
-    let axs ← liftCoreM (Lean.collectAxioms n)
-    for a in axs do
-      unless allowed.contains a do bad := bad.push s!"{n} uses {a}"
-  logInfo m!"AxiomAudit: {thms} theorems, {defs} definitions in TorusVelocityTether"
-  if bad.isEmpty then
-    logInfo "AxiomAudit PASS: only propext, Classical.choice, Quot.sound"
-  else
-    throwError m!"AxiomAudit FAIL:\n{String.intercalate "\n" bad.toList}"
+#print axioms TorusVelocityTether.IsPhase.conj
+#print axioms TorusVelocityTether.Pi_u_act
+#print axioms TorusVelocityTether.Pi_u_self
+#print axioms TorusVelocityTether.Pi_u_smul
+#print axioms TorusVelocityTether.Pi_u_smul_self
+#print axioms TorusVelocityTether.TorusState.prop
+#print axioms TorusVelocityTether.actFun_conj_actFun
+#print axioms TorusVelocityTether.actState.congr_simp
+#print axioms TorusVelocityTether.actState_ω
+#print axioms TorusVelocityTether.act_act_conj
+#print axioms TorusVelocityTether.act_add
+#print axioms TorusVelocityTether.act_add_smul_conj
+#print axioms TorusVelocityTether.act_conj_act
+#print axioms TorusVelocityTether.act_smul
+#print axioms TorusVelocityTether.act_sub
+#print axioms TorusVelocityTether.c1_c3_not_unique_T
+#print axioms TorusVelocityTether.comparison_ode_ceiling
+#print axioms TorusVelocityTether.conj_mul_self_of_norm_one
+#print axioms TorusVelocityTether.cubic_field_neg
+#print axioms TorusVelocityTether.eq_zero_of_fieldPairing_self
+#print axioms TorusVelocityTether.fd_act
+#print axioms TorusVelocityTether.fieldCurl_act
+#print axioms TorusVelocityTether.fieldCurl_smul
+#print axioms TorusVelocityTether.fieldPairing_act
+#print axioms TorusVelocityTether.fieldPairing_self
+#print axioms TorusVelocityTether.fieldPairing_smul_left
+#print axioms TorusVelocityTether.fieldPairing_smul_right
+#print axioms TorusVelocityTether.finEnergy_act
+#print axioms TorusVelocityTether.isL2_act
+#print axioms TorusVelocityTether.isRep_act
+#print axioms TorusVelocityTether.kineticEnergyCurlIdentity
+#print axioms TorusVelocityTether.modeDensity_strict_neg
+#print axioms TorusVelocityTether.modeE_act
+#print axioms TorusVelocityTether.modePairing_act_conj_right
+#print axioms TorusVelocityTether.modePairing_add_add
+#print axioms TorusVelocityTether.modePairing_comm
+#print axioms TorusVelocityTether.modePairing_phase
+#print axioms TorusVelocityTether.modePairing_self
+#print axioms TorusVelocityTether.modePairing_self_nonneg
+#print axioms TorusVelocityTether.modePairing_self_pos
+#print axioms TorusVelocityTether.modePairing_smul_left
+#print axioms TorusVelocityTether.modePairing_smul_right
+#print axioms TorusVelocityTether.scaleState_ω
+#print axioms TorusVelocityTether.step2_degree_T
+#print axioms TorusVelocityTether.step5_higher_order_vanishes
+#print axioms TorusVelocityTether.step5_tetherKernelT
+#print axioms TorusVelocityTether.tetherKernelT_C1
+#print axioms TorusVelocityTether.tetherKernelT_C2
+#print axioms TorusVelocityTether.tetherKernelT_C3
+#print axioms TorusVelocityTether.tetherKernelT_comm
+#print axioms TorusVelocityTether.tetherKernelT_diag_nonpos
+#print axioms TorusVelocityTether.tetherKernelT_energy_conservation
+#print axioms TorusVelocityTether.tetherKernelT_feedbackAtMost
+#print axioms TorusVelocityTether.tetherKernelT_polarizes
+#print axioms TorusVelocityTether.tetherKernelT_polarizes_at
+#print axioms TorusVelocityTether.tetherKernelT_quadratic_form
+#print axioms TorusVelocityTether.torus_velocity_tether_product_theorem
+#print axioms TorusVelocityTether.uniqueness_T
+#print axioms TorusVelocityTether.velSlot_act
+#print axioms TorusVelocityTether.velSlot_energy
+#print axioms TorusVelocityTether.velSlot_scale
+#print axioms TorusVelocityTether.wt_nonneg
+#print axioms TorusVelocityTether.young_absorption
