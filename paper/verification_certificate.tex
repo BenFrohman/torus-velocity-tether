@@ -1,0 +1,105 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\title{Verification certificate for the Lean~4 development \texttt{torus-velocity-tether}}
+\author{Benjamin Frohman}
+\email{frohmanbenjamin@gmail.com}
+\date{\today}
+\begin{document}
+\begin{abstract}
+This document certifies that the Lean~4 formalization in the repository \texttt{torus-velocity-tether} builds with its pinned toolchain, contains no \texttt{sorry} and no user-declared axioms, and that every theorem depends only on Lean's standard axioms.
+\end{abstract}
+\maketitle
+\section{Verification certificate}
+
+The formal development was machine-checked as follows.
+
+{\raggedright
+\begin{itemize}
+\item Repository:\\ {\footnotesize\url{https://github.com/BenFrohman/torus-velocity-tether}}
+\item Verified commit:\\ {\footnotesize\texttt{0a916ec06e17780af0788a7b3bf8e034ff7bf107}}
+\item Lean toolchain: \texttt{leanprover/lean4:v4.30.0-rc1}
+\item Mathlib: tag \texttt{v4.30.0-rc1}, commit (from \texttt{lake-manifest.json})\\ {\footnotesize\texttt{0c154d67103f74be3a0f2c509f72ccbf5be9f2a7}}
+\item Continuous integration run (build, axiom audit, \texttt{sorry}/\texttt{axiom} scan; passed):\\ {\footnotesize\url{https://github.com/BenFrohman/torus-velocity-tether/actions/runs/41571865074}}
+\item SHA-256 of the GitHub source tarball of the verified commit, downloaded twice with identical result:\\ {\footnotesize\url{https://github.com/BenFrohman/torus-velocity-tether/archive/0a916ec06e17780af0788a7b3bf8e034ff7bf107.tar.gz}}\\
+{\footnotesize\texttt{022a2f44b68c4bd17a14aecb74dce6dada1e4675a90184ef940458a26af10f06}}
+\end{itemize}\par}
+
+The tarball hash refers to the verified commit rather than to a release tag, since a document cannot contain the hash of an archive that includes itself. The Lean sources are unchanged between that commit and the release tag.
+
+\textbf{The development contains no \texttt{sorry} and no user-declared axioms.} Every one of the 63 theorems and lemmas listed below depends only on Lean's standard axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound} (or on none). The table is the verbatim output of \texttt{lake env lean AxiomAudit.lean} (\texttt{\#print axioms}) on the verified commit.
+
+{\footnotesize
+\begin{longtable}{p{0.55\linewidth}p{0.38\linewidth}}
+\hline
+Lean declaration & \texttt{\#print axioms} \\
+\hline\endhead
+\path{TorusVelocityTether.IsPhase.conj} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.Pi_u_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.Pi_u_self} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.Pi_u_smul} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.Pi_u_smul_self} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.TorusState.prop} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.actFun_conj_actFun} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.actState.congr_simp} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.actState_ω} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_act_conj} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_add} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_add_smul_conj} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_conj_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_smul} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.act_sub} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.c1_c3_not_unique_T} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.comparison_ode_ceiling} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.conj_mul_self_of_norm_one} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.cubic_field_neg} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.eq_zero_of_fieldPairing_self} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fd_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldCurl_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldCurl_smul} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldPairing_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldPairing_self} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldPairing_smul_left} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.fieldPairing_smul_right} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.finEnergy_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.isL2_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.isRep_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.kineticEnergyCurlIdentity} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modeDensity_strict_neg} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modeE_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_act_conj_right} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_add_add} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_comm} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_phase} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_self} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_self_nonneg} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_self_pos} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_smul_left} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.modePairing_smul_right} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.scaleState_ω} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.step2_degree_T} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.step5_higher_order_vanishes} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.step5_tetherKernelT} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_C1} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_C2} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_C3} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_comm} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_diag_nonpos} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_energy_conservation} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_feedbackAtMost} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_polarizes} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_polarizes_at} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.tetherKernelT_quadratic_form} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.torus_velocity_tether_product_theorem} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.uniqueness_T} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.velSlot_act} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.velSlot_energy} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.velSlot_scale} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.wt_nonneg} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\path{TorusVelocityTether.young_absorption} & \texttt{[propext, Classical.choice, Quot.sound]} \\
+\hline
+\end{longtable}}
+
+\end{document}
