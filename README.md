@@ -1,6 +1,6 @@
 # torus-velocity-tether (private)
 
-[![Lean certificate](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml/badge.svg)](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml)
+[![certify.yml](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml/badge.svg?branch=main)](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml)
 
 Lean 4 + Mathlib rebuild of the velocity-tether model on the 3-torus T³, in Fourier variables.
 It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `a241bf427d25be13e358c6df09176ca3f3ad75e4`
