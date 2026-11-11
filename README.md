@@ -3,7 +3,7 @@
 [![certify.yml](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml/badge.svg?branch=main)](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml)
 
 Lean 4 + Mathlib rebuild of the velocity-tether model on the 3-torus T³, in Fourier variables.
-It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `a241bf427d25be13e358c6df09176ca3f3ad75e4`
+It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `66c3d7ae9dc81363e07c488edb0e373e2c689697` (the pre-rewrite pin `a241bf4` has the same Lean tree as `d413b14`; later commits only add modules)
 (it uses `streamFunctionRepresentative_T3`, `fieldCurl_functionalDerivative_eq` and `fieldGateauxRep_unique`).
 ℝ³ is **never** identified with T³. **This repository does not solve, and does not claim to solve, the Clay Navier–Stokes problem.**
 
