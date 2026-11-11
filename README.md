@@ -1,4 +1,4 @@
-# torus-velocity-tether (private)
+# torus-velocity-tether
 
 [![certify.yml](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml/badge.svg?branch=main)](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml)
 
