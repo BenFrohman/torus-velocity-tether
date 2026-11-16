@@ -2,6 +2,10 @@
 
 [![certify.yml](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml/badge.svg?branch=main)](https://github.com/BenFrohman/torus-velocity-tether/actions/workflows/certify.yml)
 
+## Kernel certificate
+
+[certificates/CERTIFICATE.md](certificates/CERTIFICATE.md): commit `94b766a`, `leanprover/lean4:v4.30.0-rc1`. `lake build` passes; the sorry/axiom scan finds 0 hits; **69 theorems depend only on `propext`, `Classical.choice`, `Quot.sound`**; 2 of 2 modules replayed through the kernel, 0 failures ([CI run](https://github.com/BenFrohman/torus-velocity-tether/actions/runs/43937836399)).
+
 Lean 4 + Mathlib rebuild of the velocity-tether model on the 3-torus T³, in Fourier variables.
 It depends on `BenFrohman/torus-fourier-ns-lemmas` @ `66c3d7ae9dc81363e07c488edb0e373e2c689697` (the pre-rewrite pin `a241bf4` has the same Lean tree as `d413b14`; later commits only add modules)
 (it uses `streamFunctionRepresentative_T3`, `fieldCurl_functionalDerivative_eq` and `fieldGateauxRep_unique`).
