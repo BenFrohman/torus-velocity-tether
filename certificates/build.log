@@ -1,0 +1,47 @@
+✔ [8265/8271] Built TorusFourierNS.Basic (3.8s)
+⚠ [8266/8271] Built TorusFourierNS.Strain (3.0s)
+warning: TorusFourierNS/Strain.lean:130:40: This simp argument is unused:
+  ← Complex.ofReal_pow
+
+Hint: Omit it from the simp argument list.
+  simp [Complex.mul_re, Complex.mul_im,̵ ̵←̵ ̵C̵o̵m̵p̵l̵e̵x̵.̵o̵f̵R̵e̵a̵l̵_̵p̵o̵w̵]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [8267/8271] Built TorusFourierNS.GateauxBridge (3.1s)
+⚠ [8268/8271] Built TorusFourierNS.FieldBiotSavart (3.4s)
+warning: TorusFourierNS/FieldBiotSavart.lean:83:56: This simp argument is unused:
+  mul_one
+
+Hint: Omit it from the simp argument list.
+  simp only [one_pow, neg_one_sq, one_mul, neg_one_mul,̵ ̵m̵u̵l̵_̵o̵n̵e̵] at h1 h2
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [8269/8271] Built TorusVelocityTether.Basic (5.1s)
+warning: TorusVelocityTether/Basic.lean:80:17: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: TorusVelocityTether/Basic.lean:249:42: unused variable `h`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: TorusVelocityTether/Basic.lean:449:14: This simp argument is unused:
+  norm_smul
+
+Hint: Omit it from the simp argument list.
+  simp [̵n̵o̵r̵m̵_̵s̵m̵u̵l̵,̵ ̵m̵u̵l̵_̵p̵o̵w̵]̵[̲m̲u̲l̲_̲p̲o̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: TorusVelocityTether/Basic.lean:477:44: This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [Pi.sub_apply, Pi.smul_apply, s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵,̵ ̵Complex.real_smul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [8270/8271] Built TorusVelocityTether (2.5s)
+Build completed successfully (8271 jobs).
