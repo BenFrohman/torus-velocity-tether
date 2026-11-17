@@ -41,3 +41,7 @@ What is proved vs. conditional: See "What is proved unconditionally" and "What i
 ## Citation
 
 Cite this work with [`CITATION.cff`](CITATION.cff) (GitHub's "Cite this repository" button).
+
+## License and attribution
+
+This work is licensed under the Apache License 2.0 (see [LICENSE](LICENSE) and [NOTICE](NOTICE)). Any use, reproduction, or redistribution, in whole or in part, must retain the NOTICE file and credit Benjamin Stanley Frohman as the author. If you use this work in a publication, please cite it (see [CITATION.cff](CITATION.cff) / the Zenodo DOI).
